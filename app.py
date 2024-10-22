@@ -30,6 +30,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
+    name = db.Column(db.String(120), nullable=False)
+    description = db.Column(db.String(255), nullable=True)
     password = db.Column(db.String(128), nullable=False)
     
     posts = db.relationship('Post', backref='author', lazy=True)
@@ -97,11 +99,13 @@ def register():
     username = data.get('username')
     email = data.get('email')
     password = data.get('password')
+    name = data.get('name')
+    description = data.get('description')
 
     if User.query.filter_by(email=email).first():
         return jsonify({'message': 'User already exists'}), 400
 
-    new_user = User(username=username, email=email, password=password)
+    new_user = User(username=username, email=email, password=password, name=name, description=description)
     # new_user.set_password(password)
     db.session.add(new_user)
     db.session.commit()
@@ -127,6 +131,7 @@ def login():
     email = data.get('email')
     password = data.get('password')
 
+
     user = User.query.filter_by(email=email).first()
     if user is None or user.password != password:
         return jsonify({'message': 'Invalid credentials'}), 401
@@ -151,9 +156,12 @@ def profile():
 @app.route('/posts', methods=['POST'])
 @jwt_required()
 def create_post():
-    data = request.get_json()
     user_id = get_jwt_identity()
-    new_post = Post(title=data['title'], content=data['content'], user_id=user_id)
+    data = request.get_json()
+    title = data.get('title')
+    content = data.get('content')
+    image_url = data.get('image_url')
+    new_post = Post(title=title, content=content, image_url=image_url, user_id=user_id)
     db.session.add(new_post)
     db.session.commit()
 
@@ -167,6 +175,7 @@ def get_posts():
         'id': post.id,  # Added post ID
         'title': post.title,
         'content': post.content,
+        'image_url': post.image_url,
         'author': post.author.username
     } for post in posts])
 
@@ -180,6 +189,7 @@ def get_post(post_id):
         'id': post.id,
         'title': post.title,
         'content': post.content,
+        'image_url': post.image_url,
         'author': post.author.username,
         'created_at': post.created_at
     }), 200
