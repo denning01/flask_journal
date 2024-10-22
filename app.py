@@ -101,8 +101,8 @@ def register():
     if User.query.filter_by(email=email).first():
         return jsonify({'message': 'User already exists'}), 400
 
-    new_user = User(username=username, email=email)
-    new_user.set_password(password)
+    new_user = User(username=username, email=email, password=password)
+    # new_user.set_password(password)
     db.session.add(new_user)
     db.session.commit()
 
@@ -126,6 +126,7 @@ def login():
     data = request.get_json()
     email = data.get('email')
     password = data.get('password')
+
 
     user = User.query.filter_by(email=email).first()
     if user is None or not user.check_password(password):
