@@ -127,9 +127,8 @@ def login():
     email = data.get('email')
     password = data.get('password')
 
-
     user = User.query.filter_by(email=email).first()
-    if user is None or not user.check_password(password):
+    if user is None or user.password != password:
         return jsonify({'message': 'Invalid credentials'}), 401
 
     access_token = create_access_token(identity=user.id)
