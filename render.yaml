@@ -1,8 +1,7 @@
 services:
   - type: web
-    name: demo-flask-app
+    name: flask-journal
     env: python
-    plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn -w 4 app:app
-    autoDeploy: true
+    buildCommand: |
+      apt-get update && apt-get install -y cups
+      pip install -r requirements.txt
