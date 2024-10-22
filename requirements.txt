@@ -37,6 +37,7 @@ Flask-SQLAlchemy==3.1.1
 future==0.18.2
 gdown==5.2.0
 greenlet==3.1.0
+gunicorn==23.0.0
 h11==0.14.0
 httplib2==0.14.0
 idna==2.8
@@ -64,6 +65,7 @@ more-itertools==4.2.0
 netifaces==0.10.4
 oauthlib==3.1.0
 olefile==0.46
+packaging==24.1
 paramiko==2.6.0
 parso==0.5.2
 pexpect==4.6.0
