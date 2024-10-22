@@ -176,7 +176,8 @@ def get_posts():
         'title': post.title,
         'content': post.content,
         'image_url': post.image_url,
-        'author': post.author.username
+        'author': post.author.username,
+        'number_of_comments': len(post.comments)
     } for post in posts])
 
 @app.route('/posts/<int:post_id>', methods=['GET'])
@@ -191,7 +192,8 @@ def get_post(post_id):
         'content': post.content,
         'image_url': post.image_url,
         'author': post.author.username,
-        'created_at': post.created_at
+        'created_at': post.created_at,
+        'number_of_comments': len(post.comments)
     }), 200
 
 @app.route('/posts/<int:post_id>/comments', methods=['POST'])
